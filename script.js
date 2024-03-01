@@ -27,16 +27,14 @@ function selectCell(row, col) {
 }
 
 function nextTurn() {
+	if (checkWinner()) alert("winner");
 	if (currentPlayer === 1) {
 		currentPlayer = 2;
 		setTimeout(computerTurn, 1000);
 	} else {
 		currentPlayer = 1;
-		playerTurn();
 	}
 }
-
-function playerTurn() {}
 
 function computerTurn() {
 	setTimeout(5000);
@@ -60,6 +58,73 @@ function getEmptyCells() {
 		}
 	}
 	return cells;
+}
+
+function checkWinner() {
+	const winnerPositions = [
+		// Rows
+		[
+			[0, 0],
+			[0, 1],
+			[0, 2],
+		],
+		[
+			[1, 0],
+			[1, 1],
+			[1, 2],
+		],
+		[
+			[2, 0],
+			[2, 1],
+			[2, 2],
+		],
+		// Columns
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+		],
+		[
+			[0, 1],
+			[1, 1],
+			[2, 1],
+		],
+		[
+			[0, 2],
+			[1, 2],
+			[2, 2],
+		],
+		// Diagonals
+		[
+			[0, 0],
+			[1, 1],
+			[2, 2],
+		],
+		[
+			[0, 2],
+			[1, 1],
+			[2, 0],
+		],
+	];
+
+	let winner = false;
+	for (let n = 0; n < winnerPositions.length; n++) {
+		winner = checkPosition(winnerPositions[n]);
+		if (winner) {
+			return winner;
+		}
+	}
+	return winner;
+}
+
+function checkPosition(position) {
+	for (let i = 0; i < position.length; i++) {
+		const [row, col] = position[i];
+		if (model[row][col] !== currentPlayer) {
+			return false;
+		}
+	}
+	return true;
 }
 
 // ******* VIEW *********
