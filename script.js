@@ -2,6 +2,7 @@ window.addEventListener("load", start);
 
 // ******* CONTROLLER *********
 let currentPlayer = 1;
+let human = 1;
 function start() {
 	makeBoardClickable();
 	displayBoard();
@@ -9,7 +10,7 @@ function start() {
 
 function boardClicked(event) {
 	const cell = event.target;
-	if (currentPlayer === 1 && cell.classList.contains("cell")) {
+	if (currentPlayer === human && cell.classList.contains("cell")) {
 		const row = cell.dataset.row;
 		const col = cell.dataset.col;
 		selectCell(row, col);
@@ -28,11 +29,11 @@ function selectCell(row, col) {
 
 function nextTurn() {
 	if (checkWinner()) alert("winner");
-	if (currentPlayer === 1) {
-		currentPlayer = 2;
+	if (currentPlayer === human) {
+		currentPlayer = (currentPlayer % 2) + 1;
 		setTimeout(computerTurn, 1000);
 	} else {
-		currentPlayer = 1;
+		currentPlayer = (currentPlayer % 2) + 1;
 	}
 }
 
@@ -111,10 +112,10 @@ function checkWinner() {
 	for (let n = 0; n < winnerPositions.length; n++) {
 		winner = checkPosition(winnerPositions[n]);
 		if (winner) {
-			return winner;
+			return currentPlayer;
 		}
 	}
-	return winner;
+	return null;
 }
 
 function checkPosition(position) {
@@ -167,4 +168,14 @@ function writeToCell(row, col, value) {
 
 function readFromCell(row, col) {
 	return model[row][col];
+}
+
+function copyBoard() {
+	let copy = [];
+	model.forEach((row) => {
+		let rowCopy = [];
+		row.forEach((value) => rowCopy.push(value));
+		copy.push(rowCopy);
+	});
+	return copy;
 }
